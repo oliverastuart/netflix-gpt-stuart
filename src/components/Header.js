@@ -1,12 +1,40 @@
-import { signOut } from "firebase/auth";
-import React from "react";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import React, { useEffect } from "react";
 import { auth } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addUser, removeUser } from "../utils/userSlice";
 
 export default function Header() {
-  const user = useSelector((store) => store.user);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/auth.user
+        const { uid, email, displayName, photoURL } = user;
+        console.log("Url-auth", user);
+        dispatch(
+          addUser({
+            uid: uid,
+            email: email,
+            displayName: displayName,
+            photoUrl: photoURL,
+          })
+        );
+        console.log("auth is called");
+        navigate("/browse");
+        // ...
+      } else {
+        // User is signed out
+        dispatch(removeUser());
+        navigate("/");
+        // ...
+      }
+    });
+  }, []);
+  const user = useSelector((store) => store.user);
   const handleSignout = () => {
     signOut(auth)
       .then(() => {
@@ -18,6 +46,9 @@ export default function Header() {
         // An error happened.
       });
   };
+  useEffect(() => {
+    console.log("user-data1", user);
+  }, []);
   return (
     <div className="absolute px-8 py-4 bg-gradient-to-b from-black z-10 w-screen flex justify-between">
       <img
@@ -31,7 +62,7 @@ export default function Header() {
             className="w-10 h-10"
             //src="https://occ-0-6624-2164.1.nflxso.net/dnm/api/v6/K6hjPJd6cR6FpVELC5Pd6ovHRSk/AAAABY20DrC9-11ewwAs6nfEgb1vrORxRPP9IGmlW1WtKuaLIz8VxCx5NryzDK3_ez064IsBGdXjVUT59G5IRuFdqZlCJCneepU.png?r=229"
             alt="user-icon"
-            src={user?.photoURL}
+            src={user?.photoUrl}
           ></img>
           <button
             className="font-bold text-white ml-1 align-top"
