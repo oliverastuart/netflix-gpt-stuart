@@ -9,6 +9,7 @@ import {
 import { auth } from "../utils/firebase";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
+import { USER_AVATAR } from "../utils/constants";
 export default function Login() {
   const dispatch = useDispatch();
   const [isSigninForm, setIsSigninForm] = useState(true);
@@ -36,12 +37,10 @@ export default function Login() {
         .then((userCredential) => {
           // Signed in
           const user = userCredential.user;
-          console.log(user);
           //auth.currentUser can be replased with user object on the above line of code
           updateProfile(user, {
             displayName: name.current.value,
-            photoURL:
-              "https://imgs.search.brave.com/FrjknLEFfRY9CepUgm1ImDKqj8lF3wVf5egvCuiYEzs/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90My5m/dGNkbi5uZXQvanBn/LzAxLzE4LzAxLzk4/LzM2MF9GXzExODAx/OTgyMl82Q0tYUDZy/WG1WaERPemJYWmxM/cUVNMnlhNEhoWXpT/Vi5qcGc",
+            photoURL: USER_AVATAR,
           })
             .then(() => {
               // Profile updated!
@@ -79,7 +78,6 @@ export default function Login() {
         .then((userCredential) => {
           // Signed in
           const user = userCredential.user;
-          console.log(user);
           // ...
         })
         .catch((error) => {

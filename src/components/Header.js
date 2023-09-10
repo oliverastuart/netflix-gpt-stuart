@@ -4,17 +4,17 @@ import { auth } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser, removeUser } from "../utils/userSlice";
+import { LOGO } from "../utils/constants";
 
 export default function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/auth.user
         const { uid, email, displayName, photoURL } = user;
-        console.log("Url-auth", user);
         dispatch(
           addUser({
             uid: uid,
@@ -23,7 +23,6 @@ export default function Header() {
             photoUrl: photoURL,
           })
         );
-        console.log("auth is called");
         navigate("/browse");
         // ...
       } else {
@@ -33,6 +32,7 @@ export default function Header() {
         // ...
       }
     });
+    return () => unsubscribe();
   }, []);
   const user = useSelector((store) => store.user);
   const handleSignout = () => {
@@ -46,16 +46,10 @@ export default function Header() {
         // An error happened.
       });
   };
-  useEffect(() => {
-    console.log("user-data1", user);
-  }, []);
+  useEffect(() => {}, []);
   return (
     <div className="absolute px-8 py-4 bg-gradient-to-b from-black z-10 w-screen flex justify-between">
-      <img
-        className="w-52"
-        src="https://cdn.cookielaw.org/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png"
-        alt="Logo"
-      />
+      <img className="w-52" src={LOGO} alt="Logo" />
       {user && (
         <div className="flex p-2  items-center  justify-center">
           <img
