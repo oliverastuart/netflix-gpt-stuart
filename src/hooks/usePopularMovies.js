@@ -18,7 +18,8 @@ const usePopularMovies = () => {
   };
 
   useEffect(() => {
-    popularMovies && getPopularMovies();
+    //to avoid api calls we can check if data is already present in popularMovies only then render else dont
+    !popularMovies && getPopularMovies();
   }, []);
 };
 export default usePopularMovies;

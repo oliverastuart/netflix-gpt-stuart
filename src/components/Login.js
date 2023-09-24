@@ -91,11 +91,15 @@ export default function Login() {
     <div>
       <Header />
       <div className="absolute ">
-        <img src={BG_URL} alt="Background" />
+        <img
+          className="h-screen object-cover w-screen"
+          src={BG_URL}
+          alt="Background"
+        />
       </div>
       <form
         onSubmit={(e) => e.preventDefault()}
-        className="w-3/12 absolute mt-10 bg-black p-12 mx-auto right-0 left-0 text-white bg-opacity-80"
+        className="w-full md:w-3/12 absolute mt-32 md:mt-26 bg-black p-12 mx-auto right-0 left-0 text-white bg-opacity-80 "
       >
         <h1 className="font-bold text-3xl py-4">
           {isSigninForm ? "Sign In" : "Sign Up"}

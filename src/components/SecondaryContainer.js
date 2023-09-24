@@ -7,7 +7,7 @@ export default function SecondaryContainer() {
   console.log("movies", movies.nowPlayingMovies);
   return (
     <div className=" bg-black">
-      <div className="-mt-48 relative z-20">
+      <div className="mt-0 md:-mt-48 relative z-20 pl-4 md:pl-12">
         <MovieList title={"Now Playing"} movies={movies.nowPlayingMovies} />
         <MovieList title={"Now Trending"} movies={movies.popularMovies} />
         <MovieList title={"Romantic Movies"} movies={movies.nowPlayingMovies} />

@@ -56,10 +56,10 @@ export default function Header() {
     dispatch(changeLanguage(e.target.value));
   };
   return (
-    <div className="absolute px-8 py-4 bg-gradient-to-b from-black z-10 w-screen flex justify-between">
-      <img className="w-52" src={LOGO} alt="Logo" />
+    <div className="absolute px-8 py-4 bg-gradient-to-b from-black z-10 w-screen flex  flex-col md:flex-row md:justify-between justify-center">
+      <img className="w-52 mx-auto md:mx-0 -mb-6  " src={LOGO} alt="Logo" />
       {user && (
-        <div className="flex p-2  items-center  justify-center">
+        <div className="flex p-2  items-center  justify-between">
           {showGpt && (
             <select
               className="bg-black rounded-lg text-white p-3"
@@ -81,7 +81,7 @@ export default function Header() {
             {showGpt ? "Homepage" : "GPT Search"}
           </button>
           <img
-            className="w-10 h-10"
+            className="w-10 h-10 hidden md:inline-block"
             //src="https://occ-0-6624-2164.1.nflxso.net/dnm/api/v6/K6hjPJd6cR6FpVELC5Pd6ovHRSk/AAAABY20DrC9-11ewwAs6nfEgb1vrORxRPP9IGmlW1WtKuaLIz8VxCx5NryzDK3_ez064IsBGdXjVUT59G5IRuFdqZlCJCneepU.png?r=229"
             alt="user-icon"
             src={user?.photoUrl}
