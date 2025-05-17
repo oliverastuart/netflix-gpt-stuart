@@ -10,22 +10,26 @@ export default function GptSearchBar() {
   const searchText = useRef(null);
   const handleGptsearchClick = async () => {
     //make an api call to openAi CHat gpt and get results.
-    const gptQuery =
-      "Act as a Movie Recommendation system and suggest some movvies for the query : " +
-      searchText.current.value +
-      ". only give me names of 5 movies comma seperated like the example result given ahea. example result: gadar, sholay, don, ek tha tiger, golmal";
-    const gptResuls = await openai.chat.completions.create({
-      messages: [{ role: "user", content: gptQuery }],
-      model: "gpt-3.5-turbo",
-    });
-    const gptMovies = gptResuls.choices?.[0]?.message?.content.split(",");
-    const promiseArray = gptMovies.map((movie) => searchMovieTMDB(movie));
-    console.log("promiseArray", gptMovies);
-    const tmdbResult = await Promise.all(promiseArray);
-    console.log("illi", tmdbResult);
-    dispatch(
-      addGPTMovieResult({ movieNames: gptMovies, movieResults: tmdbResult })
-    );
+    try {
+      const gptQuery =
+        "Act as a Movie Recommendation system and suggest some movvies for the query : " +
+        searchText.current.value +
+        ". only give me names of 5 movies comma seperated like the example result given ahea. example result: gadar, sholay, don, ek tha tiger, golmal";
+      const gptResuls = await openai.chat.completions.create({
+        messages: [{ role: "user", content: gptQuery }],
+        model: "gpt-3.5-turbo",
+      });
+      const gptMovies = gptResuls.choices?.[0]?.message?.content.split(",");
+      const promiseArray = gptMovies.map((movie) => searchMovieTMDB(movie));
+      console.log("promiseArray", gptMovies);
+      const tmdbResult = await Promise.all(promiseArray);
+      console.log("illi", tmdbResult);
+      dispatch(
+        addGPTMovieResult({ movieNames: gptMovies, movieResults: tmdbResult })
+      );
+    } catch (error) {
+      dispatch(addGPTMovieResult({ movieNames: [], movieResults: [] }));
+    }
   };
 
   //movie search
