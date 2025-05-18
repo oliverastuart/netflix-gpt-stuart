@@ -12,7 +12,6 @@ export default function MovieList({ title, movies }) {
             <MovieCard key={movie.id} posterPath={movie.poster_path} />
           ))}
         </div>
-        {/* <MovieCard poster_path={props.movies[0].poster_path} /> */}
       </div>
     </div>
   );

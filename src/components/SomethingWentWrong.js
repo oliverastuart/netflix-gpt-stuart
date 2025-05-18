@@ -11,7 +11,7 @@ function SomethingWentWrong({
         </h2>
         <p className="mt-2 text-gray-600 dark:text-gray-400">
           This might be due to a network issue, no results found for your
-          search, or the GPT API quota being exceeded. Please try again in a
+          search, or the Gemini API quota being exceeded. Please try again in a
           while.
         </p>
       </div>

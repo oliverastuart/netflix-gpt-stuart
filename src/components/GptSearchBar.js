@@ -1,44 +1,98 @@
 import React, { useRef } from "react";
 import languageConfig from "../utils/languageConstants";
-import openai from "../utils/openai";
 import { useDispatch, useSelector } from "react-redux";
-import { API_Options } from "../utils/constants";
+import { API_Options, GEMINI_API_URL, MOVIE_DB_URL } from "../utils/constants";
 import { addGPTMovieResult } from "../utils/GptSlice";
 
 export default function GptSearchBar() {
   const dispatch = useDispatch();
   const searchText = useRef(null);
+
   const handleGptsearchClick = async () => {
-    //make an api call to openAi CHat gpt and get results.
     try {
-      const gptQuery =
-        "Act as a Movie Recommendation system and suggest some movvies for the query : " +
-        searchText.current.value +
-        ". only give me names of 5 movies comma seperated like the example result given ahea. example result: gadar, sholay, don, ek tha tiger, golmal";
-      const gptResuls = await openai.chat.completions.create({
-        messages: [{ role: "user", content: gptQuery }],
-        model: "gpt-3.5-turbo",
+      const userQuery = searchText.current.value;
+      if (!userQuery.trim()) {
+        return;
+      }
+
+      const promptText = `
+      Act as a Movie Recommendation system.
+      Suggest some movies for the query: "${userQuery}".
+      IMPORTANT:
+      1. Only give me names of 5 movies.
+      2. The movie names MUST be comma-separated (e.g., Gadar, Sholay, Don, Ek Tha Tiger, Golmaal).
+      3. Do NOT include any numbering, bullet points, or any other text before or after the movie list.
+    `;
+
+      const requestBody = {
+        contents: [
+          {
+            parts: [
+              {
+                text: promptText,
+              },
+            ],
+          },
+        ],
+        generationConfig: {
+          temperature: 0.7,
+          maxOutputTokens: 150,
+        },
+      };
+
+      const response = await fetch(GEMINI_API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
       });
-      const gptMovies = gptResuls.choices?.[0]?.message?.content.split(",");
+
+      if (!response.ok) {
+        dispatch(addGPTMovieResult({ movieNames: [], movieResults: [] }));
+      }
+
+      const data = await response.json();
+      console.log("Gemini API Full Response:", data);
+
+      const textResponse =
+        data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+      console.log("Gemini text response (raw):", textResponse);
+
+      if (!textResponse.trim()) {
+        console.warn("Gemini returned an empty response or malformed content.");
+        dispatch(addGPTMovieResult({ movieNames: [], movieResults: [] }));
+        return;
+      }
+
+      const gptMovies = textResponse
+        .split(",")
+        .map((movie) => movie.trim().replace(/[^\w\s'-:]/g, ""))
+        .filter(Boolean);
+
+      console.log("Parsed movie names:", gptMovies);
+
+      if (gptMovies.length === 0) {
+        dispatch(addGPTMovieResult({ movieNames: [], movieResults: [] }));
+        return;
+      }
+
       const promiseArray = gptMovies.map((movie) => searchMovieTMDB(movie));
-      console.log("promiseArray", gptMovies);
       const tmdbResult = await Promise.all(promiseArray);
-      console.log("illi", tmdbResult);
+
       dispatch(
         addGPTMovieResult({ movieNames: gptMovies, movieResults: tmdbResult })
       );
     } catch (error) {
+      console.error("Error in handleGptsearchClick:", error);
       dispatch(addGPTMovieResult({ movieNames: [], movieResults: [] }));
     }
   };
 
-  //movie search
   const searchMovieTMDB = async (movie) => {
     console.log("movie1", movie);
     const data = await fetch(
-      "https://api.themoviedb.org/3/search/movie?query=" +
-        movie +
-        "&include_adult=false&language=en-US&page=1",
+      MOVIE_DB_URL + movie + "&include_adult=false&language=en-US&page=1",
       API_Options
     );
 

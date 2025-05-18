@@ -1,12 +1,12 @@
-# 🎬 Netflix Replica with GPT & TMDb Integration
+# 🎬 Simple Netflix Replica with Gemini & TMDb Integration
 
-This project is a basic replica of Netflix that leverages the power of GPT (OpenAI) and TMDb (The Movie Database) to provide smart movie and TV show recommendations. The application features a clean, responsive UI styled with Tailwind CSS and supports multilingual search UI elements to demonstrate globalization.
+This project is a basic replica of Netflix that leverages the power of Gemini and TMDb (The Movie Database) to provide smart movie and TV show recommendations. The application features a clean, responsive UI styled with Tailwind CSS and supports multilingual search UI elements to demonstrate globalization.
 
 ---
 
 ## ✨ Features
 
-- 🔍 **Smart Search with GPT**: Users can search for movies using natural language prompts (e.g., _"Find horror movies from the 80s"_).
+- 🔍 **Smart Search with Gemini API**: Users can search for movies using natural language prompts (e.g., _"Find horror movies from the 80s"_).
 - 🎞️ **TMDb API Integration**: Fetches real-time movie details, posters, trailers, and metadata from TMDb.
 - 💅 **Tailwind CSS**: Modern and responsive UI design, inspired by Netflix’s layout.
 - 🌐 **Globalization Support**: The search page includes a localized search button available in a few different languages (e.g., English, Spanish, Hindi).
@@ -18,7 +18,7 @@ This project is a basic replica of Netflix that leverages the power of GPT (Open
 
 - **React** – UI library
 - **Tailwind CSS** – Utility-first styling framework
-- **OpenAI GPT API** – For intelligent search queries
+- **Gemini API** – For intelligent search queries
 - **Redux Toolkit** – For managing application state
 - **TMDb API** – For fetching movie and TV show data
 
