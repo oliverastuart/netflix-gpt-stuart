@@ -24,7 +24,9 @@ export default function GptSearch() {
       </div>
       <div className="flex flex-col gap-6">
         <GptSearchBar />
-        <GptMovieSuggestions />
+        <div className="bg-black">
+          <GptMovieSuggestions />
+        </div>
       </div>
     </>
   );

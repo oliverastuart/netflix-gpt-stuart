@@ -9,7 +9,7 @@ export default function GptMovieSuggestions() {
   if (movieNames?.length === 0) return <SomethingWentWrong />;
   if (!movieNames) return null;
   return (
-    <div className="p-4 m-4 bg-black text-white bg-opacity-80">
+    <div className="p-4 m-4 bg-black text-white bg-opacity-80 bg-black">
       {movieNames.map((movieName, index) => (
         <MovieList
           key={movieName}

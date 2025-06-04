@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import languageConfig from "../utils/languageConstants";
 import { useDispatch, useSelector } from "react-redux";
 import { API_Options, GEMINI_API_URL, MOVIE_DB_URL } from "../utils/constants";
@@ -7,9 +7,11 @@ import { addGPTMovieResult } from "../utils/GptSlice";
 export default function GptSearchBar() {
   const dispatch = useDispatch();
   const searchText = useRef(null);
+  const [loading, setLoading] = useState(false);
 
   const handleGptsearchClick = async () => {
     try {
+      setLoading(true);
       const userQuery = searchText.current.value;
       if (!userQuery.trim()) {
         return;
@@ -86,6 +88,8 @@ export default function GptSearchBar() {
     } catch (error) {
       console.error("Error in handleGptsearchClick:", error);
       dispatch(addGPTMovieResult({ movieNames: [], movieResults: [] }));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -102,19 +106,22 @@ export default function GptSearchBar() {
   };
   const currentLanguage = useSelector((store) => store.appconfig.language);
   return (
-    <div className="flex justify-center pt-[45%] md:pt-[15%]">
+    <div className="flex justify-center pt-[65%] md:pt-[15%]">
       <form
-        className="bg-black w-full md:w-1/2 grid grid-cols-12"
+        className="bg-black w-full md:w-1/2 mx-2 md:mx-0 grid grid-cols-12"
         onSubmit={(e) => e.preventDefault()}
       >
         <input
           ref={searchText}
           type="text"
-          className="p-4 m-4 col-span-9"
+          className="p-4 m-4 col-span-8 text-xs md:text-lg"
           placeholder={languageConfig[currentLanguage].searchPlaceholder}
         ></input>
         <button
-          className="py-2 px-4 bg-red-700 text-white rounded-lg col-span-3 m-4"
+          disabled={loading}
+          className={`py-2 px-4 text-white rounded-lg col-span-4 m-4 ${
+            loading ? "bg-red-500" : "bg-red-700"
+          }`}
           onClick={handleGptsearchClick}
         >
           {languageConfig[currentLanguage].search}

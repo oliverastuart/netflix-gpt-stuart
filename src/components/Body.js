@@ -9,9 +9,5 @@ export default function Body() {
     { path: "/browse", element: <Browse /> },
   ]);
 
-  return (
-    <div>
-      <RouterProvider router={appRouter} />
-    </div>
-  );
+  return <RouterProvider router={appRouter} />;
 }

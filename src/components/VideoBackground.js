@@ -7,18 +7,19 @@ export default function VideoBackground(props) {
   useMovieTrailer(props.movieId);
 
   return (
-    <div className="w-screen">
+    <div className="w-[100%] ">
       <iframe
-        className="w-screen aspect-video"
+        className="w-full aspect-video"
         src={
           "https://www.youtube.com/embed/" +
           trailerVideo?.key +
-          "?&autoplay=1&mute=1"
+          "?autoplay=1&mute=1&loop=1&playlist=" +
+          trailerVideo?.key
         }
         title="YouTube video player"
         frameBorder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowFullscreen
+        allowFullScreen
       ></iframe>
     </div>
   );
